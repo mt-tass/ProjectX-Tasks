@@ -1,8 +1,8 @@
 Algorithm :
 1. Iporting libraries:
-   1.importing re , symspellpy , nltk and spacy
-   2.loading corpus of english words
-   3.also loading the dictionary for symspellpy
+   1. importing re , symspellpy , nltk and spacy
+   2. loading corpus of english words
+   3. also loading the dictionary for symspellpy
 2. defining correct_word function
    1. if a word exists in nltk words corpus return the word
    2. else , search the closest word using symspellpy
