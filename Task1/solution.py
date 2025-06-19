@@ -37,7 +37,7 @@ def correct_word(word):
     if lower in eng_dict:
         return word 
     new_word = correct_error(word)
-    print(new_word)
+    #print(new_word)
     if new_word.lower() in eng_dict :
         return restore_case(word,new_word)
     else:
