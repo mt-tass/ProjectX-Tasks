@@ -1,26 +1,45 @@
 import re
-from symspellpy import SymSpell
+#from symspellpy import SymSpell
 import nltk
 from nltk.corpus import words
 import spacy
 import os
+def get_dictionary(path):
+	with open(path,'r') as file:
+		return set(word.strip().lower() for word in file)
 
-eng_dict = set(w.lower() for w in words.words())
+eng_dict = get_dictionary("eng_dictionary.txt")
 nlp = spacy.load("en_core_web_sm")
 
-sym_spell = SymSpell(max_dictionary_edit_distance=1)
-sym_spell.load_dictionary("en-80k.txt", term_index=0, count_index=1)
+#sym_spell = SymSpell(max_dictionary_edit_distance=1)
+#sym_spell.load_dictionary("en-80k.txt", term_index=0, count_index=1)
+error_map = {
+    '5':'s',
+    'e':'c',
+    'c':'e'
+}
 
+def correct_error(word):
+    word = list(word)
+    for i,char in enumerate(word):
+        if char in error_map:
+            og_char = word[i]
+            word[i] = error_map[char]
+            new_word = ''.join(word)
+            if new_word.lower() in eng_dict:
+                return new_word
+            word[i] = og_char
+    return ''.join(word)
 def correct_word(word):
     raw = word
     lower = word.lower()
     
     if lower in eng_dict:
         return word 
-    suggestions = sym_spell.lookup(word, verbosity=2)
-    if suggestions:
-        best = suggestions[0].term
-        return restore_case(word, best)
+    new_word = correct_error(word)
+    print(new_word)
+    if new_word.lower() in eng_dict :
+        return restore_case(word,new_word)
     else:
         return word
 def restore_case(og, corrected):
